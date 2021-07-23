@@ -7,7 +7,7 @@ const existsRecommendation = async (youtubeLink: string) => {
     
     const result = await connection.query(sql, [youtubeLink]);
 
-    return result.rows[0] ? true : false; 
+    return result.rowCount > 0; 
 };
 
 export { existsRecommendation };

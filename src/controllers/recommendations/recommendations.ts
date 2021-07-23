@@ -1,27 +1,13 @@
-import { Express, Request, Response } from 'express';
-import { existsRecommendation } from '../../repositories/recommendations/existsRecommendation';
-import { insertRecommendation } from '../../repositories/recommendations/insertRecommendation';
-import { validateRecommendation } from '../../services/recommendations/validateRecommendation';
+import { Express } from 'express';
+import { addRecommendation } from './addRecommendation';
+import { downvoteRecommendation } from './downvoteRecommendation';
+import { upvoteRecommendation } from './upvoteRecommendation';
+
 
 const recommendations = (app: Express) => {
-	app.post('/recommendations', async (req: Request, res: Response) => {
-		const { name, youtubeLink } = req.body;
-
-		if (!validateRecommendation(name, youtubeLink)) {
-			return res.sendStatus(400);
-		}
-
-        try {
-            const exists = await existsRecommendation(youtubeLink);
-            if(exists) return res.sendStatus(409);
-
-            await insertRecommendation(name, youtubeLink);
-            res.sendStatus(201);
-        } catch(err) {
-            console.log(err);
-            res.sendStatus(500);
-        }
-	});
+	app.post('/recommendations', addRecommendation);
+	app.post('/recommendations/:id/upvote', upvoteRecommendation);
+	app.post('/recommendations/:id/downvote', downvoteRecommendation);
 };
 
 export { recommendations };

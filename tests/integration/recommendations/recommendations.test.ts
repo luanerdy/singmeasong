@@ -6,14 +6,14 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-	await connection.query('DELETE FROM recommendations');
+	await connection.query('TRUNCATE recommendations RESTART IDENTITY');
 });
 
 describe('POST /recommendations', () => {
 	it('should return status 400 for invalid body', async () => {
 		const body = {
 			name: '',
-			youtubeLink: '',
+			youtubeLink: ''
 		};
 
 		const recommendation = await addRecommendation(body);
@@ -24,7 +24,7 @@ describe('POST /recommendations', () => {
 	it('should return status 409 for existing recommendation', async () => {
 		const body = {
 			name: 'Tareco e mariola',
-			youtubeLink: 'https://www.youtube.com/watch?v=zF9f_1OHnFk',
+			youtubeLink: 'https://www.youtube.com/watch?v=zF9f_1OHnFk'
 		};
 
 		await addRecommendation(body);
@@ -36,7 +36,7 @@ describe('POST /recommendations', () => {
 	it('should return status 201 and add a recommendation for valid body', async () => {
 		const body = {
 			name: 'Tareco e mariola',
-			youtubeLink: 'https://www.youtube.com/watch?v=zF9f_1OHnFk',
+			youtubeLink: 'https://www.youtube.com/watch?v=zF9f_1OHnFk'
 		};
 
 		const recommendation = await addRecommendation(body);
